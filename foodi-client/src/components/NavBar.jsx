@@ -1,7 +1,33 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import logo from "/logo.png";
-import { BiPhoneCall } from "react-icons/bi";
-const NavBar = () => {
+import { FaRegUser } from "react-icons/fa";
+//import Modal from "./Modal";
+//import { AuthContext } from "../contexts/AuthProvider";
+//import Profile from "./Profile";
+
+const Navbar = () => {
+  const [isSticky, setSticky] = useState(false);
+
+  //const { user } = useContext(AuthContext);
+ // console.log(user);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const offset = window.scrollY;
+      if (offset > 0) {
+        setSticky(true);
+      } else {
+        setSticky(false);
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll);
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
+
   const navItems = (
     <>
       <li>
@@ -45,11 +71,19 @@ const NavBar = () => {
     </>
   );
   return (
-    <header className="max-w-screen-2xl container ms-auto">
-      <div className="navbar xl:px-24">
+    <header
+      className={`max-w-screen-2xl container mx-auto fixed top-0 left-0 right-0 transition-all duration-300 ease-in-out`}
+    >
+      <div
+        className={`navbar xl:px-24 ${
+          isSticky
+            ? "shadow-md bg-base-100 transition-all duration-300 ease-in-out"
+            : ""
+        }`}
+      >
         <div className="navbar-start">
-          <div className="dropdown">
-            <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+          <div className="dropdown justify-between">
+            <label tabIndex={0} className="btn btn-ghost lg:hidden">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 className="h-5 w-5"
@@ -64,27 +98,22 @@ const NavBar = () => {
                   d="M4 6h16M4 12h8m-8 6h16"
                 />
               </svg>
-            </div>
+            </label>
             <ul
               tabIndex={0}
-              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52"
+              className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-64 space-y-3"
             >
-              {/*Nav items */}
               {navItems}
             </ul>
           </div>
           <a href="/">
-            <img src={logo} alt="Foodi logo" />
+            <img src={logo} alt="" />
           </a>
         </div>
         <div className="navbar-center hidden lg:flex">
-          <ul className="menu menu-horizontal px-1">
-            {/*Nav items */}
-            {navItems}
-          </ul>
+          <ul className="menu menu-horizontal px-1">{navItems}</ul>
         </div>
-              <div className="navbar-end">
-                  {/* search button*/}
+        <div className="navbar-end ">
           <button className="btn btn-ghost btn-circle hidden lg:flex">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,8 +130,6 @@ const NavBar = () => {
               />
             </svg>
           </button>
-          {/* cart items */}
-
           <label
             tabIndex={0}
             className="btn btn-ghost btn-circle hidden lg:flex items-center justify-center mr-3"
@@ -126,14 +153,23 @@ const NavBar = () => {
             </div>
           </label>
 
-          {/*btn */}
-          <a className="btn bg-green rounded-full pw-6 text-white flex items-center gap-2">
-            <BiPhoneCall /> Contact
-          </a>
+          {/* login btn  {user ? (
+            <Profile user={user} />
+          ) : (
+            <button
+              onClick={() => document.getElementById("my_modal_5").showModal()}
+              className="btn flex items-center gap-2 rounded-full px-6 bg-green text-white"
+            >
+              <FaRegUser /> Login
+            </button>
+          )}*/}
+         
+
+     {    /** <Modal /> */}
         </div>
       </div>
     </header>
   );
 };
 
-export default NavBar;
+export default Navbar;
